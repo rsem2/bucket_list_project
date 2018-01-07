@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hello, {{ request.session.first_name }}! </h1>
+
+    <div class="topbar">
+        <a href="/dashboard">Return to your profile</a> | 
+        <a href="/logout">Logout</a>
+    </div>
+
+    <!-- All your friends -->
+    <p>Here is a list of your friends</p>
+    <table>
+        <td>Name</td>
+        <td>Action</td>
+    {% for friend in friends %}
+    <tr>
+        <td>
+            <a href="/dashboard/{{ friend.id }}">
+                {{ friend.first_name }} {{ friend.last_name }}
+            </a>
+        </td>
+        <td>
+            <form action="friends/remove_friend/{{ friend.id }}">
+                <input type="submit" value="Remove as friend">
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+
+    <!-- Everyone else -->
+    <p>Other users not on your friends list</p>
+    <table>
+        <td>Name</td>
+        <td>Action</td>
+    {% for notfriend in notfriends %}
+    <tr>
+        <td><a href="/dashboard/{{ notfriend.id }}">{{ notfriend.first_name }} {{ notfriend.last_name }}</a></td>
+        <td>
+            <form action="friends/add_friend/{{request.session.userid }}/{{ notfriend.id }}">
+                <input type="submit" value="Add as friend">
+            </form>
+        </td>
+        {% endfor %}
+    </tr>
+</body>
+</html>

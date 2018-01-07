@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Add a book</title>
+</head>
+<body>
+    <div class="topbar">
+        <a href="/dashboard">Home</a>
+        <a href="/logout">Logout</a>
+    </div>
+    
+    <h1>Add a new idea</h1>
+
+    <form action="/dashboard/idea_process" method = "post">
+        {% csrf_token %}
+        <p>Title <input type="text" name="title"></p>
+        <p>Upload picture (will work out how to do this)</p>
+        <p>Description</p>
+        <p><textarea name="description" cols="30" rows="10"></textarea></p>
+        <p>Toughness 
+            <select name="toughness">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>stars
+        </p>
+        <p>Time commitment
+            <select name="time">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>rating
+        </p>
+        <p>Cost 
+            <select name="cost">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>pound signs
+        </p>
+        <input type="submit" value="Add Idea">
+    </form>
+</body>
+</html>

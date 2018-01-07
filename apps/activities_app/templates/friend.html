@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Profile</title>
+</head>
+<body>
+    <div class="topbar">
+        <a href="/dashboard">Home</a> | 
+        <a href="/logout">Logout</a>
+    </div>
+
+    <h1>{{ person.first_name }}'s Page</h1>
+    {% if friends %}
+        <p>You're friends - <a href="/friends/remove_friend/{{ person.id }}">Stop being friends?</a></p> 
+    {% else %}
+        <p>You're not friends. Do you want to <a href="/friends/add_friend/{{request.session.userid }}/{{ person.id }}">add</a> them?</p>
+    {% endif %}
+
+    <div class="activitystatus">
+        <h1>Activities {{ person.first_name }} has been tagged in</h1>
+        {% for activity in uncompleted %}
+            <p><a href="/dashboard/activity/{{activity.id}}">{{ activity.idea.title }}</a> - {{ activity.idea.description}}</p>
+            {% if activity.people.all|length > 1 %}
+                <p>with: </p> 
+                <ul>
+                    {% for a_person in activity.people.all %}
+                        {% if a_person.id == request.session.userid %}
+                            <li><a href='/dashboard'>You!</a></li>
+                        {% elif a_person.id != person.id %}
+                            <li><a href='/dashboard/{{person.id}}'>{{ a_person.first_name }} {{ a_person.last_name }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+
+        <h1>Activities Doug has done</h1>
+        {% for activity in completed %}
+            <p><a href="/dashboard/activity/{{activity.id}}">{{ activity.idea.title }}</a> - {{ activity.idea.description}}</p>
+            {% if activity.people.all|length > 1 %}
+                <p>with: </p> 
+                <ul>
+                    {% for person in activity.people.all %}
+                        {% if person.id != request.session.userid %}
+                            <li><a href='/dashboard/{{person.id}}'>{{ person.first_name }} {{ person.last_name }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %} 
+        {% endfor %}
+    </div>
+
+
+</body>
+</html>
