@@ -9,6 +9,8 @@ class UserManager(models.Manager):
     def createUser(self, postData):
         password = bcrypt.hashpw(postData['password'].encode(), bcrypt.gensalt())
         self.create(first_name = postData['first_name'], last_name = postData['last_name'], email = postData['email'], password = password)
+        user = self.last()
+        return user
     
     def registerVal(self, postData):
         results = {'errors':[], 'status': False}
@@ -74,8 +76,8 @@ class User(models.Model):
     last_name = models.CharField(max_length = 100)
     email = models.CharField(max_length = 100)
     password = models.CharField(max_length = 100)
-    # admin = models.IntegerField(max_length=1)
-    # profile_picture = models.ImageField()
+    admin = models.IntegerField(default = 1)
+    profile_picture = models.ImageField(null = True)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
     objects = UserManager()

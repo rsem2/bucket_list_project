@@ -21,6 +21,8 @@ urlpatterns = [
     url(r'^/process_activity$', views.process_activity),
     url(r'^/edit_activity/(?P<num>[0-9]+)$', views.edit_activity),
     url(r'^/edit_idea/(?P<num>[0-9]+)$', views.edit_idea),
+    url(r'^/edit_idea_process/(?P<num>[0-9]+)$', views.process_edit_idea),
+    url(r'^/completed_activity_confirmation/(?P<num>[0-9]+)$', views.completed_activity_confirmation),
    
     
     # url(r'^/submit_review/(?P<num>[0-9]+)$', views.review),

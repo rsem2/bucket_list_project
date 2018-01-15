@@ -24,7 +24,12 @@
     <h3>Created by: {{ activity.activity_creator.first_name }} {{ activity.activity_creator.last_name }}</h3>
     <h3>Who has been tagged?</h3>
     {% for person in people %}
-        <p>{{ person.first_name}} {{ person.last_name }} 
+        <p>
+            {% if person.id == request.session.userid %}
+                <a href="/dashboard">{{ person.first_name}} {{ person.last_name }}</a>
+            {% else %}
+                <a href="/dashboard/{{person.id}}">{{ person.first_name}} {{ person.last_name }}</a>
+            {% endif %}
             {% if activity.activity_creator == user %}
                 <a href='/dashboard/remove_person/{{activity.id}}/{{person.id}}'>Untag</a>
             {% endif %}

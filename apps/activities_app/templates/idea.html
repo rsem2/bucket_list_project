@@ -34,12 +34,17 @@
     <div class="topbar">
         <a href="/dashboard">Home</a>
         <a href="/logout">Logout</a>
-        <a href="dashboard/edit_idea/{{ idea.id }}">Edit idea</a>
+        <a href="/dashboard/edit_idea/{{ idea.id }}">Edit idea</a>
     </div>
 
     <h1>{{ idea.title }}</h1>    
     <h2>Description: </h2>
     <h2> {{ idea.description }}</h2>
+    <h3> Toughness: {{idea.toughness}}/5, Cost: {{ idea.cost}}/5, Time committment: {{ idea.time }}/5</h3>
+
+    {% if idea.link %}
+        <p>{{idea.link}}</p>
+    {% endif %}
 
     {% if reviews %}
         <h3>Reviews</h3>
@@ -52,7 +57,7 @@
         <p>Date added: {{ review.created_at|date:"d F Y" }}</p>
     {% endfor %}
 
-    <h1>Add to your bucket list!</h1>
+    <h1>Do you want to add this to your bucket list?</h1>
         <form action='/dashboard/add_activity/{{idea.id}}' method='post'>
             {% csrf_token %}
 

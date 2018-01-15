@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Confirm Activity</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        function showMe (box) {
+
+        var chboxs = document.getElementsByName("add_friends");
+        var vis = "none";
+        for(var i=0;i<chboxs.length;i++) { 
+            if(chboxs[i].checked){
+            vis = "block";
+                break;
+            }
+        }
+        document.getElementById(box).style.display = vis;
+
+
+}
+    </script>
+</head>
+<body>
+    <h1>Nice work!</h1>
+    <form action='/dashboard/confirm_activity/{{activity.id}}' method='post'>
+        {% csrf_token %} 
+        <input type='hidden' name='completed' value=True>
+
+        <input type='hidden' name="people[]" value={{ request.session.userid }}>
+
+        {% if people|length < 2 %}
+            <p>Did you complete this activity with any of your bucket list friends?</p>
+            <p>Yes <input type="checkbox" name="add_friends" onclick="showMe('friend_list')"></p>
+            
+            <div id="friend_list" style="height: 6em; width: 12em; overflow: auto; display:none;"> 
+                {% for friend in friends %}
+                    <input type="checkbox" name="people[]" value={{friend.id}}> {{ friend.first_name }} {{friend.last_name}}<br>
+                {% endfor %}
+            </div>
+
+        {% else %}
+            <p>Tag the friends that you did it with!</p>
+                <p>People previously tagged:</p>
+                {% for person in people %}
+                    <input type="checkbox" name="people[]" value={{person.id}} checked>{{ person.first_name }} {{ person.last_name }}<br>     
+                {% endfor %}
+
+                <p>Any other friends you did it with?</p>
+                {% for friend in friends %}
+                    <input type="checkbox" name="people[]" value={{friend.id}}> {{ friend.first_name }} {{friend.last_name}}<br>
+                {% endfor %}
+        {% endif %}
+
+        <p>When did you do it?</p>
+        <input type="date" name="date">
+        
+        <p>Do you have any pics or videos to upload</p>
+        <p>Still need to work out how to do this...</p>
+
+        <p>How would you rate your experience?</p>
+        <select name="stars">
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select> stars
+
+        <p>Do you have any feedback on this experience? (optional)</p>
+        <p><textarea name="feedback" cols="30" rows="10"></textarea></p>
+        
+        <input type="submit" value="Done!!">
+    </form>
+</body>
+</html>

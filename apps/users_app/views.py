@@ -17,10 +17,15 @@ def register(request):
     if results['status'] == True:
         for error in results['errors']:
             messages.error(request, error)
+            return redirect('/')
     else:
-        User.objects.createUser(request.POST)
-        messages.success(request, "Your user has been created. Please login.")   
-    return redirect('/')
+        user = User.objects.createUser(request.POST)
+        # messages.success(request, "Your user has been created. Please login.")  
+        request.session['first_name'] = user.first_name
+        request.session['userid'] = user.id
+        request.session['email'] = user.email
+        return redirect('/dashboard') 
+    # return redirect('/')
 
 def login(request):
     results = User.objects.loginVal(request.POST)

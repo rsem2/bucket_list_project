@@ -12,7 +12,9 @@
     <div class="topbar">
         <a href="/dashboard/ideas">Get inspiration</a> | 
         <a href="/dashboard/add_activity">Add an activity</a> | 
-        <a href="/dashboard/add_idea">Add an idea</a> | 
+        {% if user.admin > 1 %}
+            <a href="/dashboard/add_idea">Add an idea</a> | 
+        {% endif %}
         <a href="/logout">Logout</a> | 
         <a href="/edit_profile">Edit profile</a> |
         <a href="/friends">View and add friends</a> | 
@@ -22,7 +24,7 @@
     <div class="activitystatus">
         <h1>Activities you've been tagged in</h1>
         {% for activity in uncompleted %}
-            <p><a href="/dashboard/activity/{{activity.id}}">{{ activity.idea.title }}</a> - {{ activity.idea.description}}</p>
+            <p><a href="/dashboard/activity/{{activity.id}}">{{ activity.title }}</a> - {{ activity.description}}</p>
             {% if activity.people.all|length > 1 %}
                 <p>with: </p> 
                 <ul>
@@ -33,14 +35,14 @@
                     {% endfor %}
                 </ul>
             {% endif %}
-            <form action='dashboard/completed_activity/{{activity.id}}/{{request.session.userid}}'>
+            <form action='dashboard/completed_activity_confirmation/{{activity.id}}'>
                 <input type="submit" value="Done!">
             </form> 
         {% endfor %}
 
         <h1>Activities you've done</h1>
         {% for activity in completed %}
-            <p><a href="/dashboard/activity/{{activity.id}}">{{ activity.idea.title }}</a> - {{ activity.idea.description}}</p>
+            <p><a href="/dashboard/activity/{{activity.id}}">{{ activity.title }}</a> - {{ activity.description}}</p>
             {% if activity.people.all|length > 1 %}
                 <p>with: </p> 
                 <ul>

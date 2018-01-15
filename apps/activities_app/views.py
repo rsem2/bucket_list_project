@@ -10,14 +10,32 @@ import random
 def profile(request):
     user = User.objects.get(id=request.session['userid'])
     ideas = Idea.objects.all()
-    for activity in user.activities.all():
-        ideas = ideas.exclude(id = activity.idea.id)
+    print ideas
+    try:
+        user.activities.all()
+    except:
+        print 'it doesnt exist'
+    else:
+        print 'it does exist'
+        # NOTE: exclude ideas already in your list
+        # for activity in user.activities.all():
+        #     ideas = ideas.exclude(id = activity.idea.id)
     idea = []
-    for i in range(0,3):
-        number = random.randrange(0, len(ideas))
-        idea.append(ideas[number])
-        ideas.exclude(id = ideas[number].id)
+    if(len(ideas)!=0):
+        if(len(ideas)<3):
+            x = len(ideas)
+        else:
+            x=3
+        numbers = []
+        for i in range(0,x):
+            number = random.randrange(0, len(ideas))
+            while number in numbers:
+                number = random.randrange(0, len(ideas))
+            numbers.append(number)
+            idea.append(ideas[number])
+            ideas.exclude(id = ideas[number].id)
     context = {
+        'user': user,
         'completed': user.activities.filter(completed=True),
         'uncompleted': user.activities.filter(completed = False),
         'idea': idea
@@ -145,7 +163,8 @@ def ideas(request):
     user = User.objects.get(id=request.session['userid'])
     ideas = Idea.objects.all()
     for activity in user.activities.all():
-        ideas = ideas.exclude(id = activity.idea.id)
+        # ideas = ideas.exclude(id = activity.idea.id)
+        ideas = ideas.all()
     context = {
         'ideas': ideas,
     }
@@ -160,5 +179,26 @@ def process_activity_edit(request, num):
     return redirect('/dashboard/activity/'+num) 
 
 def edit_idea(request, num):
+    context = {
+        'idea': Idea.objects.get(id=num),
+    }
+    return render(request, 'edit_idea.html', context)
+
+def process_edit_idea(request,num):
     idea = Idea.objects.get(id=num)
-       
+    Idea.objects.editIdea(request.POST, idea)
+    return redirect('/dashboard/idea/'+num)
+    
+def completed_activity_confirmation(request, num):
+    friends = User.objects.get(id=request.session['userid']).friends.all()
+    people = Activity.objects.get(id=num).people.all()
+    for person in people:
+        friends = friends.exclude(id = person.id)  
+    context = {
+        'activity': Activity.objects.get(id=num),
+        'user': User.objects.get(id=request.session['userid']),
+        'people': people,
+        'friends': friends,
+    }
+
+    return render(request, 'complete_activity_confirmation.html', context)
