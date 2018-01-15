@@ -7,6 +7,8 @@ urlpatterns = [
     url(r'^/add_activity/(?P<num>[0-9]+)$', views.add_activity),
     url(r'^/add_people/(?P<num>[0-9]+)$', views.add_people),
     url(r'^/remove_person/(?P<num1>[0-9]+)/(?P<num2>[0-9]+)$', views.remove_person),
+    url(r'^/edit_remove_person/(?P<num1>[0-9]+)/(?P<num2>[0-9]+)$', views.edit_remove_person),
+    url(r'^/process_activity_edit/(?P<num>[0-9]+)$', views.process_activity_edit),
     url(r'^/submit_post/(?P<num>[0-9]+)$', views.add_post),
     url(r'^/remove_post/(?P<num1>[0-9]+)/(?P<num2>[0-9]+)$', views.remove_post),
     url(r'^/(?P<num>[0-9]+)$', views.friend),
@@ -17,6 +19,8 @@ urlpatterns = [
     url(r'^/stats$', views.stats),
     url(r'^/ideas$', views.ideas),
     url(r'^/process_activity$', views.process_activity),
+    url(r'^/edit_activity/(?P<num>[0-9]+)$', views.edit_activity),
+    url(r'^/edit_idea/(?P<num>[0-9]+)$', views.edit_idea),
    
     
     # url(r'^/submit_review/(?P<num>[0-9]+)$', views.review),

@@ -84,7 +84,6 @@ def process_activity(request):
     string = '/dashboard/activity/'+str(activity.id)
     return redirect(string)
 
-
 def activity(request,num):
     friends = User.objects.get(id=request.session['userid']).friends.all()
     people = Activity.objects.get(id=num).people.all()
@@ -99,6 +98,21 @@ def activity(request,num):
     }
     return render(request, 'activity.html', context)
 
+def edit_activity(request,num):
+    friends = User.objects.get(id=request.session['userid']).friends.all()
+    people = Activity.objects.get(id=num).people.all()
+    for person in people:
+        friends = friends.exclude(id = person.id)  
+    context = {
+        'activity': Activity.objects.get(id=num),
+        'user': User.objects.get(id=request.session['userid']),
+        'people': people,
+        'friends': friends,
+        'posts': Activity.objects.get(id=num).posts.all()
+    }
+    return render(request, 'edit_activity.html', context)
+
+
 def add_people(request,num):
     activity = Activity.objects.get(id=num)
     Activity.objects.addPeople(request.POST,activity)
@@ -109,6 +123,12 @@ def remove_person(request, num1, num2):
     person = User.objects.get(id=num2)
     Activity.objects.removePerson(activity, person)
     return redirect('/dashboard/activity/'+num1)
+
+def edit_remove_person(request, num1, num2):
+    activity = Activity.objects.get(id=num1)
+    person = User.objects.get(id=num2)
+    Activity.objects.removePerson(activity, person)
+    return redirect('/dashboard/edit_activity/'+num1)
 
 def add_post(request, num):
     activity = Activity.objects.get(id=num)
@@ -133,3 +153,12 @@ def ideas(request):
 
 def stats(request):
     return render(request, 'stats.html')
+
+def process_activity_edit(request, num):
+    activity = Activity.objects.get(id=num)
+    Activity.objects.editActivity(request.POST, activity)
+    return redirect('/dashboard/activity/'+num) 
+
+def edit_idea(request, num):
+    idea = Idea.objects.get(id=num)
+       

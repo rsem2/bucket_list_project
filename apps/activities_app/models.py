@@ -36,6 +36,9 @@ class UserManager(models.Manager):
         activity.people.remove(person)
         return activity
 
+    def editActivity(self, postData, activity):
+        return activity
+
     def createPost(self, postData, activity, user):
         self.create(content = postData['content'], activity = activity, user = user)
         post = self.last()

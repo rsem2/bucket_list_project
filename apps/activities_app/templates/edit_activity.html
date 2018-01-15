@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Edit activity</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        $( document ).ready(function() {
+            var list = document.getElementById("friend_list");
+            if(name=='group'){
+                list.style.display = "block"
+            }else{
+                list.style.display = "none"
+            }
+        })
+
+        function showfield(name){
+            var list = document.getElementById("friend_list");
+            if(name=='group'){
+                list.style.display = "block"
+            }else{
+                list.style.display = "none"
+            }
+        }
+    </script>
+</head>
+<body>
+    <p>{{ activity.idea.toughness }}</p>
+    <div class="topbar">
+        <a href="/dashboard">Home</a>
+        <a href="/logout">Logout</a>
+    </div>
+    
+    <h1>Add a new activity</h1>
+
+    <form action="/dashboard/process_activity_edit/{{activity.id}}" method = "post">
+        {% csrf_token %}
+        <p>Title <input type="text" name="title" value="{{ activity.idea.title }}"></p>
+        <p>Upload picture (will work out how to do this)</p>
+        <p>Description</p>
+        <p><textarea name="description" cols="30" rows="10">{{ activity.idea.description }}</textarea></p>
+        <p>Toughness 
+            <select name="toughness">
+                {% if activity.idea.toughness == 1 %}
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                {% elif activity.idea.toughness == 2 %}
+                    <option value="1">1</option>
+                    <option value="2" selected>2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                {% elif activity.idea.toughness == 3 %}
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3" selected>3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                {% elif activity.idea.toughness == 4 %}
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4" selected>4</option>
+                    <option value="5">5</option>
+                {% else %}
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5" selected>5</option>
+                {% endif %}
+            </select>stars
+        </p>
+        <p>Time commitment
+            <select name="time">
+                {% if activity.idea.time == 1 %}
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                {% elif activity.idea.time == 2 %}
+                    <option value="1">1</option>
+                    <option value="2" selected>2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                {% elif activity.idea.time == 3 %}
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3" selected>3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                {% elif activity.idea.time == 4 %}
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4" selected>4</option>
+                    <option value="5">5</option>
+                {% else %}
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5" selected>5</option>
+                {% endif %}
+            </select>rating
+        </p>
+        <p>Cost 
+            <select name="cost">
+                {% if activity.idea.cost == 1 %}
+                    <option value="1" selected>1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                {% elif activity.idea.cost == 2 %}
+                    <option value="1">1</option>
+                    <option value="2" selected>2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                {% elif activity.idea.cost == 3 %}
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3" selected>3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                {% elif activity.idea.cost == 4 %}
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4" selected>4</option>
+                    <option value="5">5</option>
+                {% else %}
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5" selected>5</option>
+                {% endif %}
+            </select>pound signs
+        </p>
+        
+        {% if people|length < 2 %}
+            <p>Do you want to tag friends?</p>
+            <p>Yes <input type="checkbox" onchange="showfield(this.options[this.selectedIndex].value)"></p>
+                <div id="friend_list" style="height: 6em; width: 12em; overflow: auto;">
+                    <input type='hidden' name="people[]" value={{ request.session.userid }}>   
+                    {% for friend in friends %}
+                        <input type="checkbox" name="people[]" value={{friend.id}}> {{ friend.first_name }} {{friend.last_name}}<br>
+                    {% endfor %}
+                </div>
+        {% else %}
+            <p>Do you want to add or remove friends?</p>
+            <table>
+                {% for person in people %}
+                        <tr>
+                            <td>{{ person.first_name }} {{ person.last_name }}</td>
+                            <td><a href='/dashboard/edit_remove_person/{{activity.id}}/{{person.id}}'>Untag</a></td>
+                        </tr>       
+                {% endfor %}
+            </table> 
+                {% for friend in friends %}
+                    <input type="checkbox" name="people[]" value={{friend.id}}> {{ friend.first_name }} {{friend.last_name}}<br>
+                {% endfor %}
+        {% endif %}
+
+        <p>
+            Date to complete by <input type="date" name="date" value="{{ activity.date|date:"Y-m-d" }}">
+        </p>
+        <p>
+            Visibility 
+            <select name="privacy">
+                {% if activity.privacy == 1 %}
+                    <option value=1 selected>Public</option>
+                    <option value=2>Friends only</option>
+                    <option value=3>Only visible to me</option>
+                {% elif activity.privacy == 2 %}
+                    <option value=1>Public</option>
+                    <option value=2 selected>Friends only</option>
+                    <option value=3>Only visible to me</option>
+                {% else %}
+                    <option value=1>Public</option>
+                    <option value=2>Friends only</option>
+                    <option value=3 selected>Only visible to me</option>
+                {% endif %}
+            </select>
+        </p>
+
+        <input type="submit" value="Save changes">
+    </form>
+  
+</body>
+</html>
