@@ -13,11 +13,7 @@ class UserManager(models.Manager):
         return idea
     
     def createActivity(self, postData, idea, user):  
-        print postData['privacy']
-        postData['date']
-        print idea
-        print user
-        self.create(completed=False, privacy=postData['privacy'], date=postData['date'], idea=idea, activity_creator=user)  
+        self.create(title = idea.title, description = idea.description, toughness = idea.toughness, time = idea.time, cost = idea.cost, completed=False, privacy=postData['privacy'], date=postData['date'], activity_creator=user)  
         activity = self.last()  
         print activity
         print postData.getlist('people[]')
@@ -37,6 +33,7 @@ class UserManager(models.Manager):
         return activity
 
     def editActivity(self, postData, activity):
+        
         return activity
 
     def createPost(self, postData, activity, user):
@@ -61,11 +58,15 @@ class Idea(models.Model):
     objects = UserManager()
 
 class Activity(models.Model):
+    title = models.CharField(max_length = 100)
+    description = models.CharField(max_length = 1000)
+    toughness = models.IntegerField(max_length=1)
+    time = models.IntegerField(max_length=1)
+    cost = models.IntegerField(max_length=1)
     completed = models.BooleanField()
     privacy = models.IntegerField(max_length=1)
     date = models.DateField()
     # NOTE: add validation so that is completed date can't be in the future but if uncompleted date can't be in the past
-    idea = models.ForeignKey(Idea, related_name="activities")
     people = models.ManyToManyField(User, related_name="activities")
     activity_creator = models.ForeignKey(User, related_name="activities_created")
     created_at = models.DateTimeField(auto_now_add = True)
