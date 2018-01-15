@@ -7,24 +7,32 @@
     <title>Edit activity</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script type="text/javascript">
+        $(document).ready(function(){
+            $("#boxchecked").click(function (){
+                if ($("#boxchecked").prop("checked")){
+                    $("#hidden").show();
+                }else{
+                    $("#hidden").hide();
+                }              
+            });
+        });
+        // $( document ).ready(function() {
+        //     var list = document.getElementById("friend_list");
+        //     if(name=='group'){
+        //         list.style.display = "block"
+        //     }else{
+        //         list.style.display = "none"
+        //     }
+        // })
 
-        $( document ).ready(function() {
-            var list = document.getElementById("friend_list");
-            if(name=='group'){
-                list.style.display = "block"
-            }else{
-                list.style.display = "none"
-            }
-        })
-
-        function showfield(name){
-            var list = document.getElementById("friend_list");
-            if(name=='group'){
-                list.style.display = "block"
-            }else{
-                list.style.display = "none"
-            }
-        }
+        // function showfield(name){
+        //     var list = document.getElementById("friend_list");
+        //     if(name=='group'){
+        //         list.style.display = "block"
+        //     }else{
+        //         list.style.display = "none"
+        //     }
+        // }
     </script>
 </head>
 <body>
@@ -155,14 +163,14 @@
 
         
         {% if people|length < 2 %}
-            <p>Do you want to tag friends?</p>
-            <p>Yes <input type="checkbox" onchange="showfield(this.options[this.selectedIndex].value)"></p>
-                <div id="friend_list" style="height: 6em; width: 12em; overflow: auto;">
-                    <input type='hidden' name="people[]" value={{ request.session.userid }}>   
-                    {% for friend in friends %}
-                        <input type="checkbox" name="people[]" value={{friend.id}}> {{ friend.first_name }} {{friend.last_name}}<br>
-                    {% endfor %}
-                </div>
+            <p>Tag people?</p>
+            <p>Yes<input type="checkbox" value="checkbox" name="CheckboxGroup1" id="boxchecked" /></p>
+ 
+            <div id="hidden" style="height: 6em; width: 12em; overflow: auto; display:none;">
+                {% for friend in friends %}
+                    <input type="checkbox" name="people[]" value={{friend.id}}> {{ friend.first_name }} {{friend.last_name}}<br>
+                {% endfor %}
+            </div>
         {% else %}
             <p>Do you want to add or remove friends?</p>
             <table>

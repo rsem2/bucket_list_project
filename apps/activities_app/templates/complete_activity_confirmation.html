@@ -25,10 +25,10 @@
     </script>
 </head>
 <body>
+    <h1>You managed to {{ activity.title }}</h1>
     <h1>Nice work!</h1>
     <form action='/dashboard/confirm_activity/{{activity.id}}' method='post'>
         {% csrf_token %} 
-        <input type='hidden' name='completed' value=True>
 
         <input type='hidden' name="people[]" value={{ request.session.userid }}>
 

@@ -43,6 +43,15 @@ class UserManager(models.Manager):
         return activity
 
     def editActivity(self, postData, activity):
+        activity.title = postData['title']
+        activity.description = postData['description']
+        activity.toughness = postData['toughness']
+        activity.cost = postData['cost']
+        activity.time = postData['time']
+        activity.link = postData['link']
+        activity.privacy = postData['privacy']
+        activity.date = postData['date']
+        activity.save()
         return activity
 
     def createPost(self, postData, activity, user):
@@ -53,6 +62,21 @@ class UserManager(models.Manager):
     def removePost(self, post):
         post.delete()
         return
+
+    def completeActivity(self, postData, activity):
+        activity.completed = True
+        activity.date = postData['date']
+        activity.people = []
+        for person in postData.getlist('people[]'):
+            activity.people.add(User.objects.get(id=person))
+            activity.save()
+        return activity
+
+    def createRating(self, postData, idea, user):
+        self.create(stars = postData['stars'], feedback = postData['feedback'], idea = idea, user = user)
+        rating = self.last()
+        return rating
+
 
 
 class Idea(models.Model):

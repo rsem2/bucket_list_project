@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.shortcuts import render, redirect
-from .models import Idea, Activity, Post
+from .models import Idea, Activity, Post, Rating
 from ..users_app.models import User
 from time import strftime
 import random
@@ -175,7 +175,8 @@ def stats(request):
 
 def process_activity_edit(request, num):
     activity = Activity.objects.get(id=num)
-    Activity.objects.editActivity(request.POST, activity)
+    activity = Activity.objects.editActivity(request.POST, activity)
+    Activity.objects.addPeople(request.POST, activity)
     return redirect('/dashboard/activity/'+num) 
 
 def edit_idea(request, num):
@@ -200,5 +201,12 @@ def completed_activity_confirmation(request, num):
         'people': people,
         'friends': friends,
     }
-
     return render(request, 'complete_activity_confirmation.html', context)
+
+def complete_activity(request, num):
+    activity = Activity.objects.get(id=num)
+    idea = Idea.objects.get(id= activity.idea_id)
+    user = User.objects.get(id=request.session['userid'])
+    activity = Activity.objects.completeActivity(request.POST, activity)
+    rating = Rating.objects.createRating(request.POST, idea, user)
+    return redirect('/dashboard/activity/'+num)
